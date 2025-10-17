@@ -222,7 +222,7 @@ onSave={async (studentData) => {
               toast.success('Student updated successfully');
             } else {
               await createStudent(studentData);
-              toast.success('Student added successfully');
+              toast.success('Student created successfully and synced with CompanyHub');
             }
             setShowModal(false);
             setSelectedStudent(null);

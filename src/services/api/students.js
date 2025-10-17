@@ -1,5 +1,12 @@
 import studentsData from "@/services/mockData/students.json";
 
+const { ApperClient } = window.ApperSDK;
+
+const apperClient = new ApperClient({
+  apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+  apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+});
+
 let students = [...studentsData];
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -22,6 +29,37 @@ export const createStudent = async (studentData) => {
     Id: maxId + 1
   };
   students.push(newStudent);
+  
+  // Create contact in CompanyHub
+  try {
+    const result = await apperClient.functions.invoke(
+      import.meta.env.VITE_CREATE_COMPANYHUB_CONTACT,
+      {
+        body: JSON.stringify({
+          firstName: newStudent.firstName,
+          lastName: newStudent.lastName,
+          email: newStudent.email,
+          phone: newStudent.phone,
+          gradeLevel: newStudent.gradeLevel,
+          class: newStudent.class,
+          status: newStudent.status,
+          parentContact: newStudent.parentContact
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const responseData = await result.json();
+    
+    if (!responseData.success) {
+      console.info(`apper_info: Got an error in this function: ${import.meta.env.VITE_CREATE_COMPANYHUB_CONTACT}. The response body is: ${JSON.stringify(responseData)}.`);
+    }
+  } catch (error) {
+    console.info(`apper_info: Got this error in this function: ${import.meta.env.VITE_CREATE_COMPANYHUB_CONTACT}. The error is: ${error.message}`);
+  }
+  
   return { ...newStudent };
 };
 

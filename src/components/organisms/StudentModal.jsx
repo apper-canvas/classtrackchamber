@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
+import Label from "@/components/atoms/Label";
 import Card from "@/components/atoms/Card";
+import Input from "@/components/atoms/Input";
 import Avatar from "@/components/atoms/Avatar";
 import Grades from "@/components/pages/Grades";
 import Attendance from "@/components/pages/Attendance";
@@ -17,7 +19,8 @@ const StudentModal = ({ student, isOpen, onClose, onSave, onEdit, isEditing: isE
     phone: '',
     gradeLevel: '',
     class: '',
-    status: 'Active',
+status: 'Active',
+    mathsMarks: '',
     photo: '',
     parentContact: {
       name: '',
@@ -40,7 +43,8 @@ React.useEffect(() => {
           gradeLevel: student.gradeLevel || '',
           class: student.class || '',
           status: student.status || 'Active',
-          photo: student.photo || '',
+photo: student.photo || '',
+          mathsMarks: student.mathsMarks || '',
           parentContact: {
             name: student.parentContact?.name || '',
             phone: student.parentContact?.phone || '',
@@ -53,7 +57,8 @@ React.useEffect(() => {
           lastName: '',
           email: '',
           phone: '',
-          gradeLevel: '',
+gradeLevel: '',
+          mathsMarks: '',
           class: '',
           status: 'Active',
           photo: '',
@@ -374,8 +379,20 @@ const [parent, child] = field.split('.');
                         <option value="At Risk">At Risk</option>
                       </select>
                     </div>
-                  </div>
+</div>
 
+                  <div>
+                    <Label htmlFor="mathsMarks">Maths Marks</Label>
+                    <Input
+                      id="mathsMarks"
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={formData.mathsMarks}
+                      onChange={(e) => handleInputChange('mathsMarks', e.target.value)}
+                      placeholder="Enter maths marks (0-100)"
+                    />
+                  </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
                       Parent/Guardian Information
